@@ -48,4 +48,12 @@ RSpec.describe Item, type: :model do
       expect(item).to respond_to(:reserved_price)
     end
   end
+
+  describe "Associations" do
+    let(:item) { FactoryGirl.create(:item) }
+
+    it 'belongs to auction' do
+      expect(item).to belong_to(:auction)
+    end
+  end
 end
