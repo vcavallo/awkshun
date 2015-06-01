@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150531223135) do
+ActiveRecord::Schema.define(version: 20150601154111) do
 
   create_table "auctions", force: true do |t|
     t.boolean  "success"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20150531223135) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "auction_id"
+    t.integer  "participant_id"
   end
 
   create_table "items", force: true do |t|
