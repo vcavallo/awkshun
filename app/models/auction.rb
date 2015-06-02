@@ -27,10 +27,11 @@ class Auction < ActiveRecord::Base
 
   def bid_accepted?(amount)
     current_max_bid = self.current_max_bid_amount
-    if amount > current_max_bid
-      { accepted: true, message: nil }
+
+    if current_max_bid && amount <= current_max_bid
+      { accepted: false, message: "You must submit a bid of #{current_max_bid + 1} or higher" }
     else
-      { accepted: false, message: "You must submit a bid of #{current_max_bid} or higher" }
+      { accepted: true, message: nil }
     end
   end
 

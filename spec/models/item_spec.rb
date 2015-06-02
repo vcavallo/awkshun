@@ -63,6 +63,9 @@ RSpec.describe Item, type: :model do
         expect(item.already_sold).to eq true
       end
     end
+
+    describe "Item#status_by_name" do
+    end
   end
 
   describe "Associations" do
