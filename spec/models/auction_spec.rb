@@ -37,4 +37,16 @@ RSpec.describe Auction, type: :model do
     end
   end
 
+  describe "Features" do
+    let(:auction) { FactoryGirl.create(:auction) }
+
+    describe "#go_live!" do
+      it 'sets the auction\'s live status to true' do
+        expect(auction.live?).to eq false
+        auction.go_live!
+        expect(auction.live?).to eq true
+      end
+    end
+  end
+
 end
