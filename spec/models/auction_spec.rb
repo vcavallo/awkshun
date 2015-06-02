@@ -48,6 +48,41 @@ RSpec.describe Auction, type: :model do
       end
     end
 
+    describe "#go_dead!" do
+      it 'sets the auction\'s live status to false' do
+        auction.update(live: true)
+        expect(auction.live?).to eq true
+        auction.go_dead!
+        expect(auction.live?).to eq false
+      end
+    end
+
+    describe "#mark_unsuccessful" do
+      it 'sets the auction\'s success status to false' do
+        auction.mark_unsuccessful
+        expect(auction.success).to eq false
+      end
+
+      it 'doesn\'t mess with the item, which can be re-sold' do
+        auction.mark_unsuccessful
+        expect_any_instance_of(Item).not_to receive(:mark_sold)
+      end
+    end
+
+    describe "#mark_successful" do
+    let!(:item) { FactoryGirl.create(:item, auction_id: auction.id) }
+
+      it 'sets the auction\'s success status to true' do
+        auction.mark_successful
+        expect(auction.success).to eq true
+      end
+
+      it 'marks the item as sold' do
+        expect_any_instance_of(Item).to receive(:mark_sold)
+        auction.mark_successful
+      end
+    end
+
     describe "#bid_accepted?" do
       let!(:auctioned_item) {
         FactoryGirl.create(

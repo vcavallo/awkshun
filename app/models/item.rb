@@ -7,4 +7,8 @@ class Item < ActiveRecord::Base
     numericality: { greater_than_or_equal_to: 1 }
 
   belongs_to :auction
+
+  def mark_sold
+    self.update(already_sold: true)
+  end
 end

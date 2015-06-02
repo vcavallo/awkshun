@@ -47,6 +47,22 @@ RSpec.describe Item, type: :model do
     it 'has a reserved_price' do
       expect(item).to respond_to(:reserved_price)
     end
+
+    it 'has an alread_sold status' do
+      expect(item).to respond_to(:already_sold)
+    end
+  end
+
+  describe "Features" do
+    let(:item) { FactoryGirl.create(:item) }
+
+    describe "#mark_sold" do
+      it 'updates its already_sold status' do
+        item.already_sold = nil
+        item.mark_sold
+        expect(item.already_sold).to eq true
+      end
+    end
   end
 
   describe "Associations" do

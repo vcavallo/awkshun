@@ -20,7 +20,7 @@ RSpec.describe Participant, type: :model do
       let!(:auction) { FactoryGirl.create(:auction) }
       describe 'submits a bid on an auction for an amount' do
         context 'when the bid is accepted' do
-          pending 'umm.. i realized i don\'t know what i want this to do'
+          pending 'unclear what is needed as a return/response for this'
         end
 
         context 'when the bid is not accepted' do

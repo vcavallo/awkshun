@@ -8,8 +8,25 @@ class Auction < ActiveRecord::Base
     self.update(live: true)
   end
 
+  def go_dead!
+    self.update(live: false)
+  end
+
+  def mark_successful
+    self.update(success: true)
+    self.item.mark_sold
+  end
+
+  def mark_unsuccessful
+    self.update(success: false)
+  end
+
+  def current_max_bid_amount
+    self.bids.maximum(:amount)
+  end
+
   def bid_accepted?(amount)
-    current_max_bid = self.bids.maximum(:amount)
+    current_max_bid = self.current_max_bid_amount
     if amount > current_max_bid
       { accepted: true, message: nil }
     else

@@ -48,5 +48,67 @@ RSpec.describe Auctioneer, type: :model do
       end
     end
 
+    describe "#call_auction!" do
+      let!(:auction) { FactoryGirl.create(:auction, success: nil) }
+      let!(:item) {
+        FactoryGirl.create(
+          :item,
+          auction_id: auction.id,
+          reserved_price: 100
+        )
+      }
+      let!(:a_low_bid) {
+        FactoryGirl.create(
+          :bid,
+          auction_id: auction.id,
+          amount: 5
+        )
+      }
+
+      it 'ends the auction no matter what' do
+        expect(auction).to receive(:go_dead!)
+        auctioneer.call_auction!(auction)
+      end
+
+      context 'when the reserved price hasn\'t been met' do
+        let!(:another_low_bid) {
+          FactoryGirl.create(
+            :bid,
+            auction_id: auction.id,
+            amount: 12
+          )
+        }
+
+        it 'it is marked a failure' do
+          auctioneer.call_auction!(auction)
+          expect(auction.success).to eq false
+        end
+      end
+
+      context 'when the reserved price has been met' do
+        let!(:another_low_bid) {
+          FactoryGirl.create(
+            :bid,
+            auction_id: auction.id,
+            amount: 12
+          )
+        }
+
+        let!(:a_sufficient_bid) {
+          FactoryGirl.create(
+            :bid,
+            auction_id: auction.id,
+            amount: 101
+          )
+        }
+
+        it 'is marked a success and the item is now unsellable' do
+          auctioneer.call_auction!(auction)
+          expect(auction.success).to eq true
+          expect(Item.last.already_sold).to eq true
+        end
+      end
+    end
+
   end
 end
