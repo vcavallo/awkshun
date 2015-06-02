@@ -8,4 +8,13 @@ class Auction < ActiveRecord::Base
     self.update(live: true)
   end
 
+  def bid_accepted?(amount)
+    current_max_bid = self.bids.maximum(:amount)
+    if amount > current_max_bid
+      { accepted: true, message: nil }
+    else
+      { accepted: false, message: "You must submit a bid of #{current_max_bid} or higher" }
+    end
+  end
+
 end

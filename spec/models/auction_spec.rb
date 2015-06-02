@@ -47,6 +47,48 @@ RSpec.describe Auction, type: :model do
         expect(auction.live?).to eq true
       end
     end
+
+    describe "#bid_accepted?" do
+      let!(:auctioned_item) {
+        FactoryGirl.create(
+          :item,
+          reserved_price: 10,
+          auction_id: auction.id
+        )
+      }
+
+      describe 'determines if the passed amount is a legal bid' do
+        let!(:a_low_bid) {
+          FactoryGirl.create(
+            :bid,
+            auction_id: auction.id,
+            amount: 5
+          )
+        }
+
+        let!(:a_currently_high_bid) {
+          FactoryGirl.create(
+            :bid,
+            auction_id: auction.id,
+            amount: 12
+          )
+        }
+
+        context 'when it is above the current highest bid' do
+          it 'returns a hash with success and no message' do
+            expect(auction.bid_accepted?(15))
+              .to eq({ accepted: true, message: nil })
+          end
+        end
+
+        context 'when it is at or below current highest bid' do
+          it 'returns a hash with fail and a message regarding why' do
+            expect(auction.bid_accepted?(10))
+              .to eq({ accepted: false, message: "You must submit a bid of 12 or higher" })
+          end
+        end
+      end
+    end
   end
 
 end
