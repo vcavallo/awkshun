@@ -119,7 +119,7 @@ RSpec.describe Auction, type: :model do
         context 'when it is at or below current highest bid' do
           it 'returns a hash with fail and a message regarding why' do
             expect(auction.bid_accepted?(10))
-              .to eq({ accepted: false, message: "You must submit a bid of 12 or higher" })
+              .to eq({ accepted: false, message: "You must submit a bid of #{ a_currently_high_bid.amount + 1 } or higher" })
           end
         end
       end

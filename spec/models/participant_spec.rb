@@ -17,7 +17,7 @@ RSpec.describe Participant, type: :model do
     let(:participant) { FactoryGirl.create(:participant) }
 
     describe "#submit_bid" do
-      let!(:auction) { FactoryGirl.create(:auction) }
+      let!(:auction) { FactoryGirl.create(:auction, live: true) }
       describe 'submits a bid on an auction for an amount' do
         context 'when the bid is accepted' do
           pending 'unclear what is needed as a return/response for this'
@@ -25,7 +25,7 @@ RSpec.describe Participant, type: :model do
 
         context 'when the bid is not accepted' do
           it 'raises an error with details from the auction' do
-            expect_any_instance_of(Auction).to receive(:bid_accepted?)
+            allow_any_instance_of(Auction).to receive(:bid_accepted?)
               .with(100)
               .and_return({ accepted: false, message: "some message" })
             expect { participant.submit_bid(auction, 100) }
