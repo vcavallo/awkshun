@@ -4,6 +4,13 @@ RSpec.describe Auctioneer, type: :model do
   describe "Features" do
     let(:auctioneer) { FactoryGirl.create(:auctioneer) }
 
+    describe "#add_item" do
+      it 'creates an item' do
+        expect(Item).to receive(:create)
+        auctioneer.add_item('item name', 200)
+      end
+    end
+
     describe "#create_auction" do
       it 'creates an auction' do
         expect(Auction).to receive(:create)
@@ -34,16 +41,28 @@ RSpec.describe Auctioneer, type: :model do
       end
 
       context 'when the item is found' do
-        it 'tells the auction to go live' do
-          expect_any_instance_of(Auction).to receive(:go_live!)
-          auctioneer.start_auction!(item.name)
+        context 'and the item has an existing auction' do
+          it 'tells the auction to go live' do
+            expect_any_instance_of(Auction).to receive(:go_live!)
+            auctioneer.start_auction!(item.name)
+          end
+        end
+        context 'and the item does not have an existing auction' do
+          it 'creates the auction and then sets it live' do
+            auction_to_start.destroy
+            item.update(auction_id: nil)
+
+            expect(Auction).to receive(:create)
+            expect(Auction.last).to receive(:go_live!)
+            auctioneer.start_auction!(item.name)
+          end
         end
       end
 
       context 'when the item is NOT found' do
         it 'raises an error' do
           expect { auctioneer.start_auction!('whatthehell?') }
-            .to raise_error(RuntimeError, /item name/)
+            .to raise_error(RuntimeError, /no item/)
         end
       end
     end
