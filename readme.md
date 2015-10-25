@@ -15,11 +15,13 @@ This is a simple backend library for an auction system. It has a few features wr
 5. Participant/Auctioneer queries the latest action of an item by item name. The library should return the status of the auction if there is any, if the item is sold, it should return the information regarding the price sold and to whom it was sold to.
     - `Item::status_by_name(item_name)`
 
-*Some methods use the `item_name` and some use the `auction` object. This was done to follow the requests to the letter.*
+**Some methods use the `item_name` and some use the `auction` object. This was done to follow the assignments requests to the letter. Otherwise, I would normalize this interface.**
 
 Sample run-through:
 
 - `$ bundle install`
+- `$ rspec -f doc`
+- ...
 - `$ rake db:create`
 - `$ rake db:migrate`
 - `$ rails c`
