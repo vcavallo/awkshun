@@ -30,9 +30,9 @@ Sample run-through:
 - `vase_auction = Item.find_by(name: "vase")`
 - `p.submit_bid(vase_auction, 5)`
 - `Item::status_by_name("vase")`
-    -
+
     ```
-      {
+    => {
         "auction status"=>{
           "success?"=>nil,
           "live?"=>true
@@ -45,9 +45,9 @@ Sample run-through:
     ```
 - `a.call_auction!(vase_auction)`
 - `Item::status_by_name("vase")`
-    -
+
     ```
-      {
+    => {
         "auction status"=>{
           "success?"=>false,
           "live?"=>false
